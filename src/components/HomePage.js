@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/HomePage.css";
+import products from '../data/products';
+import Cart from './Cart';
 
+const HomePage = () => {
+  const [cartItems, setCartItems] = useState([]);
 
-const HomePage = ({ products, onAddToCart }) => {
+  const onAddToCart = (product) => {
+    const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
+    if (existingItemIndex >= 0) {
+      const updatedCartItems = [...cartItems];
+      updatedCartItems[existingItemIndex].quantity += 1;
+      setCartItems(updatedCartItems);
+    } else {
+      setCartItems([...cartItems, { ...product, quantity: 1 }]);
+    }
+  }
+
   return (
     <div className="home-page">
       <h1>Welcome to Our E-commerce Store!</h1>
@@ -20,6 +34,7 @@ const HomePage = ({ products, onAddToCart }) => {
           </div>
         ))}
       </div>
+      <Cart cartItems={cartItems} />
     </div>
   );
 };
